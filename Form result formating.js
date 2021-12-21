@@ -1,7 +1,33 @@
 function onEdit(e) {
   
   //Open spreadsheet, get sheets, get last row of each sheets
-  var ss = SpreadsheetApp.openById('1AHALGM9DTP4BAAIhR0NKhkNEREyAjaubVTS-wIXHF5s');
+  class spreadsheet {
+    constructor(id,name,column,numrow,numcol){
+      this.id = id;
+      this.name = name;
+      this.column = column
+      this.numrow = numrow
+      this.numcol = numcol
+    }
+    get opensheet(){
+      return SpreadsheetApp.openById(this.id).getSheetByName(this.name);
+    }
+    get lastrow(){
+      return this.open().getSheetByName(this.name).getLastRow();
+    }
+    get last_content(){
+      return this.opensheet().getrange(this.lastrow(),this.column,this.numrow,this.numcol);
+    }
+    get clean_content(){
+      return this.last_content().join().split().filter(item => item)
+    }
+  }
+  let data_sheet = new spreadsheet('1AHALGM9DTP4BAAIhR0NKhkNEREyAjaubVTS-wIXHF5s','Response',4,1,36);
+  let content = data_sheet.clean_content()
+  let response = new spreadsheet('1AHALGM9DTP4BAAIhR0NKhkNEREyAjaubVTS-wIXHF5s','Response',1,1,3)
+  let requester = response.clean_content()
+
+ /* var ss = SpreadsheetApp.openById('1AHALGM9DTP4BAAIhR0NKhkNEREyAjaubVTS-wIXHF5s');
   var sheet = ss.getSheetByName('Response');
   var info_sheet = ss.getSheetByName('Ticket')
   var last_row = sheet.getLastRow();
@@ -14,7 +40,7 @@ function onEdit(e) {
   var raw_r = rrange.getValues()
   var content = raw_content.join().split(',') 
   content = content.filter(item => item)// Remove all null data from content. 
-  var requester = raw_r.join().split(',')
+  var requester = raw_r.join().split(',')*/
   var info_sheet = ss.getSheetByName('Ticket') // Sheet where we move content into. 
   // Add requester information into info_sheet 
   info_sheet.appendRow(["Ticket Subject: " + requester[2]])
