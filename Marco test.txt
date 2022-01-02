@@ -1,0 +1,7 @@
+{%marco count_distinct (column_name, table_name)%}
+SELECT COUNT(DISTINCT ({column})) FROM {{table_name}};
+{%endmarco}
+{%marco hll (column_name, table_name)%}
+SELECT hll_merge(sketch) FROM (SELECT hll_init({{column_name}}) from {{table_name}} AS sketch);
+{%endmarco}
+{%marco ab_test ()}
